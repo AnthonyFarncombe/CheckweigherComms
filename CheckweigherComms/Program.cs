@@ -10,7 +10,7 @@ namespace CheckweigherComms
     {
         static void Main(string[] args)
         {
-            TcpListener server = new TcpListener(IPAddress.Any, 13003);
+            TcpListener server = new TcpListener(IPAddress.Any, 13002);
             server.Start();
 
             byte[] receiveBytes = new byte[ReceiveData.bytesLength];
@@ -26,6 +26,7 @@ namespace CheckweigherComms
                 {
                     using (NetworkStream stream = client.GetStream())
                     {
+                        DateTime lastTime = DateTime.Now;
                         while (true)
                         {
                             int i = 0;
@@ -50,6 +51,8 @@ namespace CheckweigherComms
                             Console.WriteLine("Target Weight:\t{0}", receiveData.TargetWeight);
                             Console.WriteLine("Min Weight:\t{0}", receiveData.MinWeight);
                             Console.WriteLine("Max Weight:\t{0}", receiveData.MaxWeight);
+
+
 
                             SendData sendData = new SendData
                             {

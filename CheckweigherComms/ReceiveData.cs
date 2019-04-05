@@ -5,7 +5,7 @@ namespace CheckweigherComms
 {
     class ReceiveData
     {
-        public const int bytesLength = 11;
+        public const int bytesLength = 12;
         private const byte DLE = 0x10;
         private const byte STX = 0x2;
         private const byte ETX = 0x3;
@@ -19,17 +19,19 @@ namespace CheckweigherComms
             if (buffer[1] != STX)
                 throw new ArgumentException($"STX ({STX}) byte not matched, found {buffer[1]}");
 
-            Command = buffer[2];
-            TargetWeight = ReverseBytes(BitConverter.ToInt16(buffer, 3));
-            MinWeight = ReverseBytes(BitConverter.ToInt16(buffer, 5));
-            MaxWeight = ReverseBytes(BitConverter.ToInt16(buffer, 7));
+            Control = buffer[2];
+            Command = buffer[3];
+            TargetWeight = ReverseBytes(BitConverter.ToInt16(buffer, 4));
+            MinWeight = ReverseBytes(BitConverter.ToInt16(buffer, 6));
+            MaxWeight = ReverseBytes(BitConverter.ToInt16(buffer, 8));
 
-            if (buffer[9] != DLE)
-                throw new ArgumentException($"DLE ({DLE}) byte not matched, found {buffer[9]}");
-            if (buffer[10] != ETX)
-                throw new ArgumentException($"ETX ({ETX}) byte not matched, found {buffer[10]}");
+            if (buffer[10] != DLE)
+                throw new ArgumentException($"DLE ({DLE}) byte not matched, found {buffer[10]}");
+            if (buffer[11] != ETX)
+                throw new ArgumentException($"ETX ({ETX}) byte not matched, found {buffer[11]}");
         }
 
+        public byte Control { get; set; }
         public byte Command { get; }
         public short TargetWeight { get; }
         public short MinWeight { get; }
